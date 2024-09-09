@@ -1,14 +1,15 @@
 import { DecoratorSymbol } from './DecoratorSymbol';
 
 import { BasePrototype } from './BasePrototype';
-import  moment from 'moment';
+import dayjs from 'dayjs';
+
 
 /**
  * Decorate a field with moment format
  *
  * @constructor
  */
-export const MomentField = (): PropertyDecorator => {
+export const DayjsField = (): PropertyDecorator => {
   return (Target: any, property: string | symbol): void => {
     const basePrototype = BasePrototype.getOrCreate(Target.constructor);
 
@@ -41,7 +42,7 @@ export const MomentField = (): PropertyDecorator => {
             }
             Reflect.defineMetadata(
               DecoratorSymbol.RAW_VALUE,
-              moment(value).format(),
+              dayjs(value),
               this,
               property,
             );

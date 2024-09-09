@@ -10,6 +10,7 @@
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist", "rollup.config.js"]

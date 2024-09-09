@@ -1,24 +1,6 @@
 require('reflect-metadata');
+var dayjs = require('dayjs');
 var moment = require('moment');
-
-function _interopNamespaceDefault(e) {
-  var n = Object.create(null);
-  if (e) {
-    Object.keys(e).forEach(function (k) {
-      if (k !== 'default') {
-        var d = Object.getOwnPropertyDescriptor(e, k);
-        Object.defineProperty(n, k, d.get ? d : {
-          enumerable: true,
-          get: function () { return e[k]; }
-        });
-      }
-    });
-  }
-  n.default = e;
-  return Object.freeze(n);
-}
-
-var moment__namespace = /*#__PURE__*/_interopNamespaceDefault(moment);
 
 var DecoratorSymbol;
 (function (DecoratorSymbol) {
@@ -174,6 +156,43 @@ const List = (prototype) => {
  *
  * @constructor
  */
+const DayjsField = () => {
+    return (Target, property) => {
+        const basePrototype = BasePrototype.getOrCreate(Target.constructor);
+        const descriptor = {
+            enumerable: true,
+            configurable: true,
+            get() {
+                return Reflect.getMetadata(DecoratorSymbol.RAW_VALUE, this, property);
+            },
+            set(value) {
+                Object.defineProperty(this, property, {
+                    enumerable: true,
+                    configurable: false,
+                    get() {
+                        return Reflect.getMetadata(DecoratorSymbol.RAW_VALUE, this, property);
+                    },
+                    set(value) {
+                        if (value === null || value === undefined) {
+                            Reflect.defineMetadata(DecoratorSymbol.RAW_VALUE, value, this, property);
+                            return;
+                        }
+                        Reflect.defineMetadata(DecoratorSymbol.RAW_VALUE, dayjs(value), this, property);
+                    },
+                });
+                this[property] = value;
+            },
+        };
+        Object.defineProperty(Target, property, descriptor);
+        basePrototype.setPropertyDescriptor(property, descriptor);
+    };
+};
+
+/**
+ * Decorate a field with moment format
+ *
+ * @constructor
+ */
 const MomentField = () => {
     return (Target, property) => {
         const basePrototype = BasePrototype.getOrCreate(Target.constructor);
@@ -195,7 +214,7 @@ const MomentField = () => {
                             Reflect.defineMetadata(DecoratorSymbol.RAW_VALUE, value, this, property);
                             return;
                         }
-                        Reflect.defineMetadata(DecoratorSymbol.RAW_VALUE, moment__namespace(value), this, property);
+                        Reflect.defineMetadata(DecoratorSymbol.RAW_VALUE, moment(value).format(), this, property);
                     },
                 });
                 this[property] = value;
@@ -318,6 +337,7 @@ function AutoModel() {
 }
 
 exports.AutoModel = AutoModel;
+exports.DayjsField = DayjsField;
 exports.Enum = Enum;
 exports.Field = Field;
 exports.List = List;

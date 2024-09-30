@@ -322,21 +322,6 @@ const ObjectList = (constructor) => {
     };
 };
 
-function AutoModel() {
-    return (constructor) => {
-        return class extends constructor {
-            constructor(...rest) {
-                super(...rest);
-                const basePrototype = BasePrototype.getOrCreate(constructor);
-                Object.entries(basePrototype.propertyDescriptors).forEach(([prop, desc]) => {
-                    Object.defineProperty(this, prop, desc);
-                });
-            }
-        };
-    };
-}
-
-exports.AutoModel = AutoModel;
 exports.DayjsField = DayjsField;
 exports.Enum = Enum;
 exports.Field = Field;

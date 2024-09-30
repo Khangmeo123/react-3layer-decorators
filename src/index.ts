@@ -12,4 +12,4 @@ export { ObjectField } from './ObjectField';
 
 export { ObjectList } from './ObjectList';
 
-export { AutoModel } from './AutoModel';
+// export { AutoModel } from './AutoModel';

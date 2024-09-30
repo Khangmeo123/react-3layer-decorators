@@ -5,4 +5,3 @@ export { DayjsField } from './DayjsField';
 export { MomentField } from './MomentField';
 export { ObjectField } from './ObjectField';
 export { ObjectList } from './ObjectList';
-export { AutoModel } from './AutoModel';
